@@ -3,25 +3,38 @@ using System.Collections;
 
 public class SplineFollowerCatmull : MonoBehaviour
 {
-    //[SerializeField] private BezierCurve _spineScoreBoard;
-    [SerializeField] private float _duration;
+    [SerializeField]
+    private SplineCatmullRomV2 _spline;
+    [SerializeField]
+    private float _duration;
 
     private CameraController _camera;
-    private float _gameStartTime;
+    private int _indexSpline = 0;
+    private float deltaT = 0;
 
     protected void Start()
     {
-        _gameStartTime = Time.time;
+        deltaT = 0;
         _camera = this.GetComponent<CameraController>();
     }
 
-    protected void Update()
+    protected void FixedUpdate()
     {
-        float delta = Time.time - _gameStartTime;
-        
-        float t = delta / _duration;
+        if ((_indexSpline + 3) < _spline.CountPoints())
+        {
+            float proportionalDuration = _duration * (_spline.ApproximateSegmentLength(_indexSpline) / _spline.Length);
+            deltaT += Time.fixedDeltaTime / proportionalDuration;
 
-        //Vector3 v = _spineScoreBoard.GetPointAt(t);
-        //this.transform.position = v;
+            if (deltaT >= 0 && deltaT <= 1)
+            {
+                transform.position = _spline.MoveObject(deltaT, _indexSpline);
+            }
+
+            if (deltaT >= 1)
+            {
+                _indexSpline += 1;
+                deltaT -= 1;
+            }
+        }
     }
 }

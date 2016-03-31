@@ -6,27 +6,6 @@ public class SplineCatmullRom : MonoBehaviour
     [SerializeField] private bool isLooping = true;
     //Has to be at least 4 so-called control points
     [SerializeField] private List<Transform> controlPointsList = new List<Transform>();
-    
-
-    private float bezierPoint(float t, float a, float b, float c, float d)
-    {
-        float C1 = (d - (3.0f * c) + (3.0f * b) - a);
-        float C2 = ((3.0f * c) - (6.0f * b) + (3.0f * a));
-        float C3 = ((3.0f * b) - (3.0f * a));
-        float C4 = (a);
-
-        return (C1 * t * t * t + C2 * t * t + C3 * t + C4);
-    }
-
-    private float bezierTangent(float t, float a, float b, float c, float d)
-    {
-        float C1 = (d - (3.0f * c) + (3.0f * b) - a);
-        float C2 = ((3.0f * c) - (6.0f * b) + (3.0f * a));
-        float C3 = ((3.0f * b) - (3.0f * a));
-        float C4 = (a);
-
-        return ((3.0f * C1 * t * t) + (2.0f * C2 * t) + C3);
-    }
 
     //Display without having to press Play
     private void OnDrawGizmos()
